@@ -1,0 +1,15 @@
+.user-control-block{
+    border: 1px solid #3c3c3b;
+    width :100%;
+    align-items: center;
+}
+
+.delete-btn {
+    height: 100%;
+    border-radius: 0;
+    width: 7rem;
+}
+
+.admin-btn {
+    background-color: #689689 !important;
+}

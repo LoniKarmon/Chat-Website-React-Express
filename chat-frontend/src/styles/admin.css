@@ -1,0 +1,38 @@
+.admin-wrapper {
+  background-color: #f9f9ed;
+  height: 100vh;
+  width: 70vi;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.Admin {
+  background-color: #689689;
+  height: 100vh;
+  width: 75vi;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AdminPage {
+  height: 100vh;
+  width: 100vi;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #3c3c3b;
+}
+
+.search-users {
+  width: 100%;
+  border: #3c3c3b solid 1px;
+  min-height: 2.5rem;
+  color: #3c3c3b;
+}
+
+h1 {
+    min-height: 3rem;
+}

@@ -1,0 +1,58 @@
+.login{
+    width: 60vi;
+    height: 40vh;
+    min-height: 20rem;
+    min-width: 30rem;
+    background-color: #689689;
+    border-radius: 3rem;
+}
+
+.login-wrapper{
+    width: 56vi;
+    height: 90%;
+    background-color: #f9f9ed;
+    border-radius: 3rem;
+}
+
+input{
+    width: 70%;
+    display: inline-block;
+    border: 1px solid #3c3c3b;
+    border-radius: 7px;
+    box-sizing: border-box;
+    background-color: inherit !important;
+    min-height: 2.5rem !important;
+    color: #3c3c3b;
+}
+
+.hollow-btn{
+    width: 10vi;
+    min-width: 13%;
+    max-width: 7rem;
+    display: inline-block;
+    border: 1px solid #3c3c3b;
+    border-radius: 7px;
+    box-sizing: border-box;
+    background-color: inherit !important;
+    color: #3c3c3b;
+}
+
+.btn{
+    width: 10vi;
+    min-width: 13%;
+    max-width: 7rem;
+    display: inline-block;
+    border: 0px;
+    border-radius: 7px;
+    box-sizing: border-box;
+    background-color: #F45B69 !important;
+    color: #f9f9ed;
+}
+
+.button-container{
+    width:70%;
+}
+
+.header{
+    color: #3c3c3b;
+}

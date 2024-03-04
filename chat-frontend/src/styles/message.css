@@ -1,0 +1,18 @@
+.message{
+    justify-self: left;
+    align-self:flex-start;
+    background-color: #699689;
+    color: #f9f9ed;
+    padding: 10px;
+    outline: none;
+    border-radius: 0px 10px 10px 0px;
+    max-width: 90%;
+}
+
+.admin-message{
+    background-color: #f45b69;
+}
+
+.message-body-text{
+    overflow-wrap: break-word;
+}
