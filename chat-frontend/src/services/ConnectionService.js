@@ -1,10 +1,9 @@
 import axios from "axios";
-import { SERVER_URL } from "../constants";
 import { StatusCodes } from "http-status-codes";
 
 const RequestLogin = async (name, password) => {
   try {
-    const response = await axios.post(`${SERVER_URL}/users`, {
+    const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/users`, {
       name: name,
       password: password,
     });
@@ -18,10 +17,13 @@ const RequestLogin = async (name, password) => {
 
 const RequestRegister = async (name, password) => {
   try {
-    const response = await axios.post(`${SERVER_URL}/users/register`, {
-      name: name,
-      password: password,
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/users/register`,
+      {
+        name: name,
+        password: password,
+      }
+    );
     localStorage.setItem("token", response.data);
     return true;
   } catch (error) {
@@ -32,7 +34,9 @@ const RequestRegister = async (name, password) => {
 
 const RequestNameCheck = async (name) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/users/exists/${name}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/users/exists/${name}`
+    );
     return response.status === StatusCodes.OK;
   } catch (error) {
     console.error(error);
@@ -42,11 +46,15 @@ const RequestNameCheck = async (name) => {
 
 const RequestAdminCheck = async () => {
   try {
-    const response = await axios.post(`${SERVER_URL}/users/is_admin`, null, {
-      headers: {
-        token: localStorage.getItem("token"),
-      },
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/users/is_admin`,
+      null,
+      {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(error);
@@ -56,7 +64,7 @@ const RequestAdminCheck = async () => {
 
 const RequestUsers = async () => {
   try {
-    const response = await axios.get(`${SERVER_URL}/users/`, {
+    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/`, {
       headers: {
         token: localStorage.getItem("token"),
       },
@@ -70,7 +78,7 @@ const RequestUsers = async () => {
 
 const RequestUserById = async (id) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/users/${id}`, {
+    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/${id}`, {
       headers: {
         token: localStorage.getItem("token"),
       },
@@ -87,11 +95,14 @@ const RequestUserById = async (id) => {
 
 const RequestUserDeletion = async (name) => {
   try {
-    const response = await axios.delete(`${SERVER_URL}/users/${name}`, {
-      headers: {
-        token: localStorage.getItem("token"),
-      },
-    });
+    const response = await axios.delete(
+      `${process.env.REACT_APP_SERVER_URL}/users/${name}`,
+      {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      }
+    );
     return response.status === StatusCodes.OK;
   } catch (error) {
     console.error(error);
@@ -102,7 +113,7 @@ const RequestUserDeletion = async (name) => {
 const RequestMessageSend = async (message) => {
   try {
     const response = await axios.post(
-      `${SERVER_URL}/messages`,
+      `${process.env.REACT_APP_SERVER_URL}/messages`,
       { message: message },
       {
         headers: {
@@ -123,7 +134,7 @@ const RequestMessageSend = async (message) => {
 
 const RequestAllMessages = async () => {
   try {
-    const response = await axios.get(`${SERVER_URL}/messages`, {
+    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/messages`, {
       headers: {
         token: localStorage.getItem("token"),
       },

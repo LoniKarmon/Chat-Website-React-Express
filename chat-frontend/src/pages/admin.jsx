@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../components/navbar";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import ConnectionService from "../services/ConnectionService";
+import ConnectionService from "../services/ConnectionService.js";
 import "../styles/admin.css";
-import UserControlBlock from "../components/UserControlBlock";
+import UserControlBlock from "../components/UserControlBlock.js";
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
