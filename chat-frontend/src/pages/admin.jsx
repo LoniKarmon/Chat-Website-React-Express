@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import ConnectionService from "../services/ConnectionService.js";
 import "../styles/admin.css";
-import UserControlBlock from "../components/UserControlBlock.js";
+import UserControlBlock from "../components/UserControlBlock.jsx";
 
 const Admin = () => {
   const [users, setUsers] = useState([]);

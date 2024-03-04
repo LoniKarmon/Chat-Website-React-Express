@@ -1,0 +1,26 @@
+version: '3'
+services:
+  client:
+    build: ./chat-frontend
+    container_name: chat-client
+    ports:
+      - "443:443"
+  server:
+    build: ./chat-backend
+    container_name: chat-server
+    ports:
+     - "8443:8443"
+    depends_on:
+     - mongodb
+  mongodb:
+    image: mongo
+    container_name: chat-db
+    ports:
+     - "27017:27017"
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.69.0/24

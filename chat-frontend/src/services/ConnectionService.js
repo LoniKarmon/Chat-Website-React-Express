@@ -1,12 +1,16 @@
 import axios from "axios";
 import { StatusCodes } from "http-status-codes";
 
+
 const RequestLogin = async (name, password) => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/users`, {
-      name: name,
-      password: password,
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/users`,
+      {
+        name: name,
+        password: password,
+      }
+    );
     localStorage.setItem("token", response.data);
     return true;
   } catch (error) {
@@ -64,11 +68,14 @@ const RequestAdminCheck = async () => {
 
 const RequestUsers = async () => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/`, {
-      headers: {
-        token: localStorage.getItem("token"),
-      },
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/users/`,
+      {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(error);
@@ -78,11 +85,14 @@ const RequestUsers = async () => {
 
 const RequestUserById = async (id) => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/${id}`, {
-      headers: {
-        token: localStorage.getItem("token"),
-      },
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/users/${id}`,
+      {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      }
+    );
     if (response.status === StatusCodes.OK) {
       return response.data;
     }
@@ -134,11 +144,14 @@ const RequestMessageSend = async (message) => {
 
 const RequestAllMessages = async () => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/messages`, {
-      headers: {
-        token: localStorage.getItem("token"),
-      },
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/messages`,
+      {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      }
+    );
     if (response.status === StatusCodes.OK) {
       return response.data;
     }

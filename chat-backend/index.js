@@ -6,21 +6,21 @@ import ErrorHandler from "./middleware/ErrorMiddleware.js";
 import dotenv from "dotenv";
 import db from "./utils/db.js";
 import { checkToken, verifyToken } from "./middleware/AuthMiddleware.js";
-import { createServer } from "http";
+import { createServer } from "https";
 import { Server } from "socket.io";
 import MessageService from "./services/MessageService.js";
 import fs from "fs";
 
 const httpsOptions = {
-  key: fs.readFileSync("../cert.pem"),
-  cert: fs.readFileSync("../key.pem"),
+  cert: fs.readFileSync("./cert.pem"),
+  key: fs.readFileSync("./key.pem"),
 };
 
 const app = express();
-const httpServer = createServer(httpsOptions, app);
-const io = new Server(httpServer, {
+const httpsServer = createServer(httpsOptions, app);
+const io = new Server(httpsServer, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: process.env.CLIENT_URL || "https://localhost:3001",
   },
 });
 dotenv.config();
@@ -51,6 +51,6 @@ io.on("connection", async (socket) => {
   }
 });
 
-httpServer.listen(port, () => {
+httpsServer.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
