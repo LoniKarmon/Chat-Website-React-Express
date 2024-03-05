@@ -19,7 +19,9 @@ const Home = () => {
     }
 
     ConnectionServices.RequestAllMessages().then((requestedMessages) => {
-      if (requestedMessages === false) {
+      if (requestedMessages !== false) {
+        setMessages(requestedMessages);
+      } else {
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -27,10 +29,30 @@ const Home = () => {
         });
         localStorage.removeItem("token");
         navigate("/login");
-      } else {
-        setMessages(requestedMessages);
       }
     });
+
+    socket.connect();
+
+    socket.on("receiveMessage", (messageId) => {
+      ConnectionServices.RequestMessage(messageId).then((message) => {
+        if (message !== false) {
+          setMessages((messages) => [...messages, message]);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      });
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const scrollToLastMessage = () => {
@@ -42,18 +64,6 @@ const Home = () => {
   useEffect(() => {
     setTimeout(scrollToLastMessage, 300);
   }, [messages]);
-
-  useEffect(() => {
-    socket.connect();
-
-    socket.on("receiveMessage", (message) => {
-      setMessages((messages) => [...messages, message]);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
 
   const sendMessage = () => {
     if (message.length > 0) {

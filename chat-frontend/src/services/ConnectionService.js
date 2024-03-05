@@ -1,7 +1,6 @@
 import axios from "axios";
 import { StatusCodes } from "http-status-codes";
 
-
 const RequestLogin = async (name, password) => {
   try {
     const response = await axios.post(
@@ -93,10 +92,7 @@ const RequestUserById = async (id) => {
         },
       }
     );
-    if (response.status === StatusCodes.OK) {
-      return response.data;
-    }
-    return false;
+    return response.data;
   } catch (error) {
     console.error(error);
     return false;
@@ -162,6 +158,26 @@ const RequestAllMessages = async () => {
   }
 };
 
+const RequestMessage = async (messageId) => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/messages/${messageId}`,
+      {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      }
+    );
+    if (response.status === StatusCodes.OK) {
+      return response.data;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
 export default {
   RequestLogin,
   RequestRegister,
@@ -172,4 +188,5 @@ export default {
   RequestUserDeletion,
   RequestMessageSend,
   RequestAllMessages,
+  RequestMessage,
 };

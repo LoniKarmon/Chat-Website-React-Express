@@ -41,14 +41,18 @@ io.on("connection", async (socket) => {
   if (!(await verifyToken(socket.handshake.query.token))) {
     console.log("Invalid token detected!!\ndisconnecting socket");
     socket.disconnect();
-  } else {
-    socket.on("sendMessage", async (messageId) => {
-      const message = await MessageService.GetMessageById(messageId);
-      if (messageId !== null) {
-        io.sockets.emit("receiveMessage", message);
-      }
-    });
   }
+
+  socket.on("sendMessage", async (messageId) => {
+    if (await verifyToken(socket.handshake.query.token)) {
+      if (messageId !== null) {
+        io.sockets.emit("receiveMessage", messageId);
+      }
+    } else {
+      console.log("Invalid token detected!!\ndisconnecting socket");
+      socket.disconnect();
+    }
+  });
 });
 
 httpsServer.listen(port, () => {

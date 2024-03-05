@@ -38,7 +38,7 @@ const LogInUser = async (user) => {
     ) {
       throw new CustomError(
         "AuthError",
-        "Email or Password is Incorrect",
+        "Name or Password is Incorrect",
         StatusCodes.BAD_REQUEST
       );
     } else {
@@ -60,11 +60,7 @@ const GetUsers = async () => {
 const GetUserById = async (id) => {
   const user = await UserRepository.FindUserById(id);
   if (user === null) {
-    throw new CustomError(
-      "AuthError",
-      "User Does Not Exist",
-      StatusCodes.BAD_REQUEST
-    );
+    return false;
   }
   return { name: user.name, isAdmin: user.isAdmin };
 };
