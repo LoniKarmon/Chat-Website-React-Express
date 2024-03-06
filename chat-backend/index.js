@@ -9,20 +9,11 @@ import { checkToken, verifyToken } from "./middleware/AuthMiddleware.js";
 import { createServer } from "https";
 import { Server } from "socket.io";
 import MessageService from "./services/MessageService.js";
-import fs from "fs";
-
-const httpsOptions = {
-  cert: fs.readFileSync("./cert.pem"),
-  key: fs.readFileSync("./key.pem"),
-};
+import { httpsOptions } from "./https.config.js";
 
 const app = express();
 const httpsServer = createServer(httpsOptions, app);
-const io = new Server(httpsServer, {
-  cors: {
-    origin: process.env.CLIENT_URL || "https://localhost:3001",
-  },
-});
+
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -37,24 +28,22 @@ app.use("/messages", checkToken, MessageRouter);
 
 app.use(ErrorHandler);
 
-io.on("connection", async (socket) => {
-  if (!(await verifyToken(socket.handshake.query.token))) {
-    console.log("Invalid token detected!!\ndisconnecting socket");
-    socket.disconnect();
-  }
-
-  socket.on("sendMessage", async (messageId) => {
-    if (await verifyToken(socket.handshake.query.token)) {
-      if (messageId !== null) {
-        io.sockets.emit("receiveMessage", messageId);
-      }
-    } else {
-      console.log("Invalid token detected!!\ndisconnecting socket");
-      socket.disconnect();
-    }
-  });
-});
-
 httpsServer.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
+
+const io = new Server(httpsServer, {
+  cors: {
+    origin: process.env.CLIENT_URL || "https://localhost:3001",
+  },
+});
+
+io.on("connection", async (socket) => {
+  socket.data.user = await verifyToken(socket.handshake.query.token);
+  if (!socket.data.user) {
+    console.log("Invalid token detected!!\ndisconnecting socket");
+    socket.disconnect();
+  }
+});
+
+export { io };

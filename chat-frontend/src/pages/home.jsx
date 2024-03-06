@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import ConnectionServices from "../services/ConnectionService.js";
+import { io } from "socket.io-client";
 import "../styles/home.css";
 import NavBar from "../components/navbar.jsx";
 import Message from "../components/message.jsx";
-import { socket } from "../services/WebsocketService.js";
 import Swal from "sweetalert2";
 
 const Home = () => {
@@ -16,28 +16,10 @@ const Home = () => {
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
-    }
-
-    ConnectionServices.RequestAllMessages().then((requestedMessages) => {
-      if (requestedMessages !== false) {
-        setMessages(requestedMessages);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
-        });
-        localStorage.removeItem("token");
-        navigate("/login");
-      }
-    });
-
-    socket.connect();
-
-    socket.on("receiveMessage", (messageId) => {
-      ConnectionServices.RequestMessage(messageId).then((message) => {
-        if (message !== false) {
-          setMessages((messages) => [...messages, message]);
+    } else {
+      ConnectionServices.RequestAllMessages().then((requestedMessages) => {
+        if (requestedMessages !== false) {
+          setMessages(requestedMessages);
         } else {
           Swal.fire({
             icon: "error",
@@ -48,11 +30,26 @@ const Home = () => {
           navigate("/login");
         }
       });
-    });
 
-    return () => {
-      socket.disconnect();
-    };
+      const URL = process.env.REACT_APP_SERVER_URL || "https://localhost:3000";
+
+      const socket = io(URL, {
+        query: { token: localStorage.getItem("token") },
+      });
+
+      socket.connect();
+
+      socket.on("message", (message) => {
+        if (message !== false) {
+          setMessages((messages) => [...messages, message]);
+        }
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+
   }, []);
 
   const scrollToLastMessage = () => {
@@ -68,8 +65,13 @@ const Home = () => {
   const sendMessage = () => {
     if (message.length > 0) {
       ConnectionServices.RequestMessageSend(message).then((messageId) => {
-        if (messageId !== false) {
-          socket.emit("sendMessage", messageId);
+        if (messageId === false) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+        } else {
         }
       });
     }

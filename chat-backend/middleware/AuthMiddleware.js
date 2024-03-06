@@ -49,7 +49,7 @@ const verifyToken = (token) => {
           await UserService.CheckUserNameExists(decoded.name);
           return false;
         } catch (err) {
-          return true;
+          return decoded;
         }
       }
     );

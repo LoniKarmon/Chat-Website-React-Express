@@ -1,7 +1,7 @@
 import Message from "../models/MessageModel.js";
 
 const CreateMessage = (message, user) => {
-  return Message.create({ text: message, user: user });
+  return Message.create({ text: message, user: user })
 };
 
 const FindMessageById = (id) => {
@@ -9,7 +9,7 @@ const FindMessageById = (id) => {
 };
 
 const GetAllMessages = () => {
-  return Message.find();
+  return Message.find().populate({ path: "user", select: "name isAdmin" });
 };
 
 export default {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ConnectionService from "../services/ConnectionService";
 import "../styles/navbar.css";
@@ -8,6 +8,12 @@ const NavBar = () => {
   const location = useLocation();
   const [show, setShow] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    ConnectionService.RequestAdminCheck().then((response) => {
+      setIsAdmin(response);
+    });
+  }, []);
 
   const handleClick = () => {
     setShow((show % 2) + 1);
@@ -19,12 +25,8 @@ const NavBar = () => {
   };
 
   const adminRef = () => {
-    navigate(`${location.pathname === "/" ? "/admin" : "/"}`)
-  }
-
-  ConnectionService.RequestAdminCheck().then((response) => {
-    setIsAdmin(response);
-  });
+    navigate(`${location.pathname === "/" ? "/admin" : "/"}`);
+  };
 
   return (
     <nav className="navbar flex flex-col">

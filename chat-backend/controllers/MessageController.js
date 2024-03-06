@@ -1,11 +1,13 @@
 import MessageService from "../services/MessageService.js";
 import { StatusCodes } from "http-status-codes";
+import { io } from "../index.js";
 
 const PostMessage = async (req, res, next) => {
   try {
     const user = req.user;
     const message = req.body.message;
     const returnedMessage = await MessageService.CreateMessage(message, user);
+    io.sockets.emit("message", returnedMessage);
     res.status(StatusCodes.OK).json(returnedMessage._id);
   } catch (error) {
     next(error);

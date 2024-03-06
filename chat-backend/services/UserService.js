@@ -3,6 +3,7 @@ import { createToken } from "../middleware/AuthMiddleware.js";
 import CustomError from "../Errors/CustomError.js";
 import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
+import { io } from "../index.js";
 
 const CreateUser = async (user) => {
   if (CheckUserInvalid(user)) {
@@ -83,6 +84,14 @@ const DeleteUser = async (name) => {
       StatusCodes.EXPECTATION_FAILED
     );
   }
+
+  const sockets = await io.fetchSockets();
+
+  sockets.forEach((socket) => {
+    if (socket.data.user.name === user.name) {
+      socket.disconnect();
+    }
+  });
 
   return await UserRepository.DeleteUser(name);
 };
